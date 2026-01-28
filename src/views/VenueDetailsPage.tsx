@@ -20,7 +20,7 @@ export function VenueDetailsPage() {
   const [error, setError] = useState<unknown>(null);
 
   const venueId = id != null ? Number(id) : NaN;
-  const isCustomer = auth.hasRole('CUSTOMER', 'ADMIN');
+  const canBook = auth.hasRole('CUSTOMER');
 
   const venueQ = useQuery({
     queryKey: ['venue', venueId],
@@ -39,8 +39,8 @@ export function VenueDetailsPage() {
       nav('/login', { replace: true, state: { from: `/venues/${venueId}` } });
       return;
     }
-    if (!isCustomer) {
-      setError(new Error('Only customers can book slots.'));
+    if (!canBook) {
+      setError(new Error('Only customers can book slots. Log in as a customer to book.'));
       return;
     }
     if (!RAZORPAY_KEY) {
@@ -153,7 +153,7 @@ export function VenueDetailsPage() {
                     <td>{end ? format(end, 'PPp') : s.endTime}</td>
                     <td>{s.venueName}</td>
                     <td>
-                      {auth.token && isCustomer ? (
+                      {auth.token && canBook ? (
                         <button
                           className="btn btnPrimary"
                           disabled={busy}
@@ -166,7 +166,7 @@ export function VenueDetailsPage() {
                           Login to book
                         </Link>
                       ) : (
-                        <span className="subtle">Owner / Admin only manage</span>
+                        <span className="subtle">Only customers can book. Log in as a customer.</span>
                       )}
                     </td>
                   </tr>
