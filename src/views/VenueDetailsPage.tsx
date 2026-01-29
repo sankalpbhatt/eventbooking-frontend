@@ -24,8 +24,8 @@ export function VenueDetailsPage() {
 
   const venueQ = useQuery({
     queryKey: ['venue', venueId],
-    queryFn: () => api.getVenueById(venueId),
-    enabled: Number.isInteger(venueId),
+    queryFn: () => api.getVenueById(venueId, auth.token),
+    enabled: Number.isInteger(venueId) && !!auth.token,
   });
 
   const slotsQ = useQuery({

@@ -84,7 +84,7 @@ export const api = {
   // Venues
   getPublicVenues: (query?: { city?: string; searchTerm?: string }) =>
     request<VenueResponse[]>('/api/venues/public/all', { query }),
-  getVenueById: (id: number) => request<VenueResponse>(`/api/venues/${id}`),
+  getVenueById: (id: number, token: string) => request<VenueResponse>(`/api/venues/${id}`, { token } ),
   getMyVenues: (token: string) => request<VenueResponse[]>('/api/venues/my-venues', { token }),
   createVenue: (token: string, body: VenueRequest) => request<VenueResponse>('/api/venues', { method: 'POST', token, body }),
   updateVenue: (token: string, id: number, body: VenueRequest) =>
